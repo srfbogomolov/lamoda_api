@@ -1,1 +1,4 @@
 debug: true
+
+postgres:
+  url: postgres://user:password@localhost:5432/dev?sslmode=disable

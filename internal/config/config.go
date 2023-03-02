@@ -13,7 +13,12 @@ const (
 )
 
 type Config struct {
-	Debug bool `yaml:"debug"`
+	Postgres *PostgresConfig `yaml:"postgres"`
+	Debug    bool            `yaml:"debug"`
+}
+
+type PostgresConfig struct {
+	URL string `yaml:"url"`
 }
 
 func LoadConfig() (cfg *Config, err error) {
