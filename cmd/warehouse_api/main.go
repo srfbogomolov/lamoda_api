@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 
 	"github.com/srfbogomolov/warehouse_api/internal/app"
@@ -21,7 +20,5 @@ func main() {
 	}
 	logger := unsugared.Sugar()
 
-	ctx := context.Background()
-
-	app.Run(ctx, cfg, logger)
+	app.Run(cfg, logger)
 }

@@ -18,5 +18,5 @@ func CreateLogger(cfg *config.Config) (logger *zap.Logger, err error) {
 		return nil, fmt.Errorf("error building logger: %w", err)
 	}
 
-	return logger, nil
+	return
 }
