@@ -1,0 +1,5 @@
+db:
+  dsn: postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable
+  driver: "postgres"
+
+debug: true

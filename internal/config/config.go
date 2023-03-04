@@ -1,39 +1,41 @@
 package config
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/viper"
 )
 
 const (
-	CONFIG_FILE = "config.yaml"
-	CONFIG_PATH = "."
+	CONFIG_NAME = "config"
+	CONFIG_TYPE = "yaml"
+	CONFIG_PATH = "./configs"
 )
 
 type Config struct {
-	Postgres *PostgresConfig `yaml:"postgres"`
-	Debug    bool            `yaml:"debug"`
+	DB    *DB  `yaml:"db"`
+	Debug bool `yaml:"debug"`
 }
 
-type PostgresConfig struct {
-	URL string `yaml:"url"`
+type DB struct {
+	DSN    string `yaml:"dsn"`
+	DRIVER string `yaml:"driver"`
 }
 
 func LoadConfig() (cfg *Config, err error) {
-	viper.SetConfigFile(CONFIG_FILE)
+	viper.SetConfigName(CONFIG_NAME)
+	viper.SetConfigType(CONFIG_TYPE)
 	viper.AddConfigPath(CONFIG_PATH)
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
 	if err = viper.ReadInConfig(); err != nil {
-		return nil, fmt.Errorf("error loading config: %w", err)
+		return nil, err
 	}
 
 	if err = viper.UnmarshalExact(&cfg); err != nil {
-		return nil, fmt.Errorf("error unmarshalling config into the structure: %w", err)
+		return nil, err
 	}
 
 	return cfg, nil
