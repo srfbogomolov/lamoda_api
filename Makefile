@@ -1,14 +1,14 @@
 service/up:
-		docker compose -f docker-compose.yml up -d $(c)
+		docker compose -f docker-compose.yaml up -d $(c)
 
 service/stop:
-		docker compose -f docker-compose.yml stop $(c)
+		docker compose -f docker-compose.yaml stop $(c)
 
 service/down:
-		docker-compose -f docker-compose.yml down
+		docker compose -f docker-compose.yaml down
 
-migration/up:
-		goose postgres 'postgres://user:password@localhost:5432/dev?sslmode=disable' up
+migrations/up:
+		goose --dir ./migrations postgres 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' up
 
-migration/down:
-		goose postgres 'postgres://user:password@localhost:5432/dev?sslmode=disable' down
+migrations/down:
+		goose --dir ./migrations postgres 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' down
