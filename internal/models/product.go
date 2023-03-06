@@ -2,13 +2,7 @@ package models
 
 import (
 	"context"
-	"errors"
 	"fmt"
-)
-
-var (
-	errEmpty        = errors.New("cannot be empty")
-	errLessThanZero = errors.New("cannot be less than zero")
 )
 
 type Product struct {

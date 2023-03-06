@@ -18,6 +18,7 @@ var (
 
 type Args struct {
 	Warehouses []*models.Warehouse `json:"warehouses"`
+	Products   []*models.Product   `json:"products"`
 }
 
 type Reply struct {
@@ -26,6 +27,7 @@ type Reply struct {
 
 type Service interface {
 	SaveWarehouses(r *http.Request, args *Args, reply *Reply) (err error)
+	SaveProducts(r *http.Request, args *Args, reply *Reply) (err error)
 }
 
 type service struct {
@@ -44,12 +46,6 @@ func NewService(warehouseRepo models.WarehouseRepository, productRepo models.Pro
 
 func (s *service) SaveWarehouses(r *http.Request, args *Args, reply *Reply) (err error) {
 	warehouses := args.Warehouses
-	if len(warehouses) == 0 {
-		err = errEmptyParams
-		s.logger.Info(err)
-		return
-	}
-
 	for _, warehouse := range warehouses {
 		if err = warehouse.Validate(); err != nil {
 			s.logger.Info(err)
@@ -78,5 +74,44 @@ func (s *service) SaveWarehouses(r *http.Request, args *Args, reply *Reply) (err
 
 	s.logger.Info(success)
 	reply.Message = "warehouse(s) was successfully added"
+	return nil
+}
+
+func (s *service) SaveProducts(r *http.Request, args *Args, reply *Reply) (err error) {
+	products := args.Products
+	if len(products) == 0 {
+		err = errEmptyParams
+		s.logger.Info(err)
+		return
+	}
+
+	for _, product := range products {
+		if err = product.Validate(); err != nil {
+			s.logger.Info(err)
+			return err
+		}
+	}
+
+	var queryErr error
+	err = s.productRepository.InTransaction(context.Background(), func(ctx context.Context) error {
+		for _, product := range products {
+			if queryErr = s.productRepository.Save(ctx, product); queryErr != nil {
+				return queryErr
+			}
+		}
+		return nil
+	})
+
+	switch {
+	case queryErr != nil:
+		s.logger.Info(queryErr)
+		return errTransaction
+	case err != nil:
+		s.logger.Info(err)
+		return errTransaction
+	}
+
+	s.logger.Info(success)
+	reply.Message = "product(s) was successfully added"
 	return nil
 }

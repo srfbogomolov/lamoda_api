@@ -17,31 +17,35 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestSaveWarehouses(t *testing.T) {
+func TestSaveProducts(t *testing.T) {
 	cases := []struct {
 		desc       string
-		warehouse  models.Warehouse
+		product    models.Product
 		request    string
 		mockReturn error
 		expected   any
 	}{
 		{
-			"Warehouse must be saved",
-			models.Warehouse{
-				ID:         0,
-				Name:       "test",
-				IsAvalible: false,
+			"Product must be saved",
+			models.Product{
+				ID:   0,
+				Name: "test",
+				Size: 0,
+				Code: "0667da7a-5c13-4be3-8aba-b5005914f38c",
+				QTY:  0,
 			},
 			`{
 				"jsonrpc": "2.0",
-				"method": "warehouse.SaveWarehouses",
+				"method": "warehouse.SaveProducts",
 				"params": [
 					{
-						"warehouses": [
+						"products": [
 							{
 								"id": 0,
 								"name": "test",
-								"is_available": false
+								"size": 0,
+								"code": "0667da7a-5c13-4be3-8aba-b5005914f38c",
+								"qty": 0
 							}
 						]
 					}
@@ -52,22 +56,26 @@ func TestSaveWarehouses(t *testing.T) {
 			"",
 		},
 		{
-			"Warehouse must be not saved",
-			models.Warehouse{
-				ID:         0,
-				Name:       "test",
-				IsAvalible: false,
+			"Product must be not saved",
+			models.Product{
+				ID:   0,
+				Name: "test",
+				Size: 0,
+				Code: "0667da7a-5c13-4be3-8aba-b5005914f38c",
+				QTY:  0,
 			},
 			`{
 				"jsonrpc": "2.0",
-				"method": "warehouse.SaveWarehouses",
+				"method": "warehouse.SaveProducts",
 				"params": [
 					{
-						"warehouses": [
+						"products": [
 							{
 								"id": 0,
 								"name": "test",
-								"is_available": false
+								"size": 0,
+								"code": "0667da7a-5c13-4be3-8aba-b5005914f38c",
+								"qty": 0
 							}
 						]
 					}
@@ -80,10 +88,10 @@ func TestSaveWarehouses(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		mockWarehouseRepo := new(mocks.MockWarehouseRepository)
-		mockWarehouseRepo.On("InTransaction", context.Background(), mock.Anything).Return(tc.mockReturn)
+		mockProductRepo := new(mocks.MockProductRepository)
+		mockProductRepo.On("InTransaction", context.Background(), mock.Anything).Return(tc.mockReturn)
 
-		service := services.NewService(mockWarehouseRepo, nil, testLogger)
+		service := services.NewService(nil, mockProductRepo, testLogger)
 		handler := app.NewHandler(service)
 		recorder := httptest.NewRecorder()
 		req := httptest.NewRequest("POST", "/warehouse", bytes.NewBufferString(tc.request))
@@ -96,6 +104,6 @@ func TestSaveWarehouses(t *testing.T) {
 		}
 
 		assert.Equal(t, tc.expected, resp.Error)
-		mockWarehouseRepo.AssertExpectations(t)
+		mockProductRepo.AssertExpectations(t)
 	}
 }
