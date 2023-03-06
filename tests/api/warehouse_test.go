@@ -28,7 +28,7 @@ func TestSaveWarehouses(t *testing.T) {
 		{
 			"Warehouse must be saved",
 			models.Warehouse{
-				ID:         0,
+				ID:         1,
 				Name:       "test",
 				IsAvalible: false,
 			},
@@ -39,7 +39,7 @@ func TestSaveWarehouses(t *testing.T) {
 					{
 						"warehouses": [
 							{
-								"id": 0,
+								"id": 1,
 								"name": "test",
 								"is_available": false
 							}
@@ -54,7 +54,7 @@ func TestSaveWarehouses(t *testing.T) {
 		{
 			"Warehouse must be not saved",
 			models.Warehouse{
-				ID:         0,
+				ID:         1,
 				Name:       "test",
 				IsAvalible: false,
 			},
@@ -65,7 +65,7 @@ func TestSaveWarehouses(t *testing.T) {
 					{
 						"warehouses": [
 							{
-								"id": 0,
+								"id": 1,
 								"name": "test",
 								"is_available": false
 							}

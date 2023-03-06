@@ -15,17 +15,18 @@ type Product struct {
 
 type ProductRepository interface {
 	Save(ctx context.Context, p *Product) error
+	GetByID(ctx context.Context, id int) (*Product, error)
 	GetAll(ctx context.Context) ([]*Product, error)
 	InTransaction(ctx context.Context, fn func(context.Context) error) error
 }
 
 func (p *Product) Validate() error {
 	if p.Name == "" {
-		return fmt.Errorf("product name %w", errEmpty)
+		return fmt.Errorf("product name %w", ErrEmpty)
 	} else if p.Size < 0 {
-		return fmt.Errorf("product size %w", errLessThanZero)
-	} else if p.QTY < 0 {
-		return fmt.Errorf("product quantity %w", errLessThanZero)
+		return fmt.Errorf("product size %w", ErrLessZero)
+	} else if p.QTY <= 0 {
+		return fmt.Errorf("product quantity %w", ErrLessOrEqualZero)
 	}
 	return nil
 }

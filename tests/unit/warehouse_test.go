@@ -17,7 +17,7 @@ func TestValidateWarehouse(t *testing.T) {
 		{
 			"Warehouse must be validated",
 			models.Warehouse{
-				ID:         0,
+				ID:         1,
 				Name:       "not empty name",
 				IsAvalible: false,
 			},
@@ -26,11 +26,11 @@ func TestValidateWarehouse(t *testing.T) {
 		{
 			"Warehouse name cannot be empty",
 			models.Warehouse{
-				ID:         0,
+				ID:         1,
 				Name:       "",
 				IsAvalible: false,
 			},
-			fmt.Errorf("warehouse name %w", errEmpty),
+			fmt.Errorf("warehouse name %w", models.ErrEmpty),
 		},
 	}
 

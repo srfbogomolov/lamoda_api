@@ -23,16 +23,16 @@ func TestSaveProducts(t *testing.T) {
 		product    models.Product
 		request    string
 		mockReturn error
-		expected   any
+		expected   string
 	}{
 		{
 			"Product must be saved",
 			models.Product{
-				ID:   0,
+				ID:   1,
 				Name: "test",
 				Size: 0,
 				Code: "0667da7a-5c13-4be3-8aba-b5005914f38c",
-				QTY:  0,
+				QTY:  1,
 			},
 			`{
 				"jsonrpc": "2.0",
@@ -41,11 +41,11 @@ func TestSaveProducts(t *testing.T) {
 					{
 						"products": [
 							{
-								"id": 0,
+								"id": 1,
 								"name": "test",
 								"size": 0,
 								"code": "0667da7a-5c13-4be3-8aba-b5005914f38c",
-								"qty": 0
+								"qty": 1
 							}
 						]
 					}
@@ -58,11 +58,11 @@ func TestSaveProducts(t *testing.T) {
 		{
 			"Product must be not saved",
 			models.Product{
-				ID:   0,
+				ID:   1,
 				Name: "test",
 				Size: 0,
 				Code: "0667da7a-5c13-4be3-8aba-b5005914f38c",
-				QTY:  0,
+				QTY:  1,
 			},
 			`{
 				"jsonrpc": "2.0",
@@ -71,11 +71,11 @@ func TestSaveProducts(t *testing.T) {
 					{
 						"products": [
 							{
-								"id": 0,
+								"id": 1,
 								"name": "test",
 								"size": 0,
 								"code": "0667da7a-5c13-4be3-8aba-b5005914f38c",
-								"qty": 0
+								"qty": 1
 							}
 						]
 					}

@@ -3,10 +3,9 @@ package repositories
 import (
 	"context"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/srfbogomolov/warehouse_api/internal/models"
 	"github.com/srfbogomolov/warehouse_api/internal/sqlstore"
-
-	"github.com/jmoiron/sqlx"
 )
 
 type sqlWarehouseRepository struct {
@@ -29,12 +28,20 @@ func (r *sqlWarehouseRepository) Save(ctx context.Context, w *models.Warehouse) 
 	return sqlstore.SaveWarehouse(ctx, db, w)
 }
 
+func (r *sqlWarehouseRepository) GetByID(ctx context.Context, id int) (*models.Warehouse, error) {
+	db, err := getSqlxDatabase(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	return sqlstore.GetWarehouseByID(ctx, db, id)
+}
+
 func (r *sqlWarehouseRepository) GetAll(ctx context.Context) ([]*models.Warehouse, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetAllWarehouse(ctx, db)
+	return sqlstore.GetAllWarehouses(ctx, db)
 }
 
 func (r *sqlWarehouseRepository) InTransaction(ctx context.Context, fn func(context.Context) error) error {

@@ -13,13 +13,14 @@ type Warehouse struct {
 
 type WarehouseRepository interface {
 	Save(ctx context.Context, w *Warehouse) error
+	GetByID(ctx context.Context, id int) (*Warehouse, error)
 	GetAll(ctx context.Context) ([]*Warehouse, error)
 	InTransaction(ctx context.Context, fn func(context.Context) error) error
 }
 
 func (w *Warehouse) Validate() error {
 	if w.Name == "" {
-		return fmt.Errorf("warehouse name %w", errEmpty)
+		return fmt.Errorf("warehouse name %w", ErrEmpty)
 	}
 	return nil
 }

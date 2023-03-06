@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/google/uuid"
 	"github.com/srfbogomolov/warehouse_api/internal/models"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,46 +17,42 @@ func TestValidateProduct(t *testing.T) {
 		{
 			"Product must be validated",
 			models.Product{
-				ID:   0,
+				ID:   1,
 				Name: "not empty name",
 				Size: 0,
-				Code: uuid.NewString(),
-				QTY:  0,
+				QTY:  1,
 			},
 			nil,
 		},
 		{
 			"Product name cannot be empty",
 			models.Product{
-				ID:   0,
+				ID:   1,
 				Name: "",
 				Size: 0,
-				Code: uuid.NewString(),
-				QTY:  0,
+				QTY:  1,
 			},
-			fmt.Errorf("product name %w", errEmpty),
+			fmt.Errorf("product name %w", models.ErrEmpty),
 		},
 		{
 			"Product size cannot be less than zero",
 			models.Product{
-				ID:   0,
+				ID:   1,
 				Name: "not empty name",
 				Size: -1,
-				Code: uuid.NewString(),
-				QTY:  0,
+				QTY:  1,
 			},
-			fmt.Errorf("product size %w", errLessThanZero),
+			fmt.Errorf("product size %w", models.ErrLessZero),
 		},
 		{
 			"Product quantity cannot be less than zero",
 			models.Product{
-				ID:   0,
+				ID:   1,
 				Name: "not empty name",
 				Size: 0,
-				Code: uuid.NewString(),
-				QTY:  -1,
+				QTY:  0,
 			},
-			fmt.Errorf("product quantity %w", errLessThanZero),
+			fmt.Errorf("product quantity %w", models.ErrLessOrEqualZero),
 		},
 	}
 
