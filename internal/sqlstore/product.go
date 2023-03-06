@@ -20,7 +20,7 @@ func SaveProduct(ctx context.Context, db SqlxDatabase, p *models.Product) error 
 	return err
 }
 
-func FindAllProduct(ctx context.Context, db SqlxDatabase) ([]*models.Product, error) {
+func GetAllProduct(ctx context.Context, db SqlxDatabase) ([]*models.Product, error) {
 	var comments []*models.Product
 	sql := `SELECT * FROM ` + ProductTable
 	err := db.SelectContext(ctx, &comments, sql)

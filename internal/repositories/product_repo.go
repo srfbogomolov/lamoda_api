@@ -29,12 +29,12 @@ func (r *SqlProductRepository) Save(ctx context.Context, p *models.Product) erro
 	return sqlstore.SaveProduct(ctx, db, p)
 }
 
-func (r *SqlProductRepository) FindAll(ctx context.Context) ([]*models.Product, error) {
+func (r *SqlProductRepository) GetAll(ctx context.Context) ([]*models.Product, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.FindAllProduct(ctx, db)
+	return sqlstore.GetAllProduct(ctx, db)
 }
 
 func (r *SqlProductRepository) InTransaction(ctx context.Context, fn func(context.Context) error) error {

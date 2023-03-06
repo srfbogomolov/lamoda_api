@@ -2,10 +2,8 @@ package models
 
 import (
 	"context"
-	"errors"
+	"fmt"
 )
-
-var errEmptyWarehouseName = errors.New("warehouse name cannot be empty")
 
 type Warehouse struct {
 	ID         int    `db:"id" json:"id"`
@@ -21,7 +19,7 @@ type WarehouseRepository interface {
 
 func (w *Warehouse) Validate() error {
 	if w.Name == "" {
-		return errEmptyWarehouseName
+		return fmt.Errorf("warehouse name %w", errEmpty)
 	}
 	return nil
 }

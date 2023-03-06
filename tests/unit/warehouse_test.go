@@ -1,7 +1,7 @@
 package unit_test
 
 import (
-	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/srfbogomolov/warehouse_api/internal/models"
@@ -15,27 +15,27 @@ func TestValidateWarehouse(t *testing.T) {
 		expected  error
 	}{
 		{
-			"Warehouse must be valid",
+			"Warehouse must be validated",
 			models.Warehouse{
-				ID:         1,
+				ID:         0,
 				Name:       "not empty name",
-				IsAvalible: true,
+				IsAvalible: false,
 			},
 			nil,
 		},
 		{
-			"Warehouse must be not valid",
+			"Warehouse name cannot be empty",
 			models.Warehouse{
-				ID:         1,
+				ID:         0,
 				Name:       "",
-				IsAvalible: true,
+				IsAvalible: false,
 			},
-			errors.New("warehouse name cannot be empty"),
+			fmt.Errorf("warehouse name %w", errEmpty),
 		},
 	}
 
 	for _, tc := range cases {
 		err := tc.warehouse.Validate()
-		assert.Equal(t, err, tc.expected, tc.desc)
+		assert.Equal(t, tc.expected, err, tc.desc)
 	}
 }
