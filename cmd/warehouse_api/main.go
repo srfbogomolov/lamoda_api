@@ -5,6 +5,7 @@ import (
 
 	"github.com/srfbogomolov/warehouse_api/internal/app"
 	"github.com/srfbogomolov/warehouse_api/internal/config"
+	"github.com/srfbogomolov/warehouse_api/internal/db"
 	"github.com/srfbogomolov/warehouse_api/internal/logger"
 )
 
@@ -20,5 +21,10 @@ func main() {
 	}
 	logger := unsugared.Sugar()
 
-	app.Run(cfg, logger)
+	db, err := db.ConnectDB(cfg.DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	app.Run(cfg, db, logger)
 }

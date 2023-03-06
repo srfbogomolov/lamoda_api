@@ -20,7 +20,7 @@ func SaveWarehouse(ctx context.Context, db SqlxDatabase, w *models.Warehouse) er
 	return err
 }
 
-func FindAllWarehouse(ctx context.Context, db SqlxDatabase) ([]*models.Warehouse, error) {
+func GetAllWarehouse(ctx context.Context, db SqlxDatabase) ([]*models.Warehouse, error) {
 	var warehouses []*models.Warehouse
 	sql := `SELECT * FROM ` + WarehouseTable
 	err := db.SelectContext(ctx, &warehouses, sql)

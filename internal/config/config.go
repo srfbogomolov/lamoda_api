@@ -7,25 +7,31 @@ import (
 )
 
 const (
-	CONFIG_NAME = "config"
-	CONFIG_TYPE = "yaml"
-	CONFIG_PATH = "./configs"
+	configName = "config"
+	configType = "yaml"
+	configPath = "./configs"
 )
 
 type Config struct {
-	DB    *DB  `yaml:"db"`
-	Debug bool `yaml:"debug"`
+	DB     *DB     `yaml:"db"`
+	Server *Server `yaml:"server"`
+	Debug  bool    `yaml:"debug"`
 }
 
 type DB struct {
 	DSN    string `yaml:"dsn"`
-	DRIVER string `yaml:"driver"`
+	Driver string `yaml:"driver"`
+}
+
+type Server struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
 }
 
 func LoadConfig() (cfg *Config, err error) {
-	viper.SetConfigName(CONFIG_NAME)
-	viper.SetConfigType(CONFIG_TYPE)
-	viper.AddConfigPath(CONFIG_PATH)
+	viper.SetConfigName(configName)
+	viper.SetConfigType(configType)
+	viper.AddConfigPath(configPath)
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()

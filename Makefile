@@ -12,3 +12,6 @@ migrations/up:
 
 migrations/down:
 		goose --dir ./migrations postgres 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' down
+
+tests/run:
+		go test ./tests/...
