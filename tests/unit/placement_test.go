@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/srfbogomolov/warehouse_api/internal/models"
 	"github.com/stretchr/testify/assert"
 )
@@ -17,35 +18,35 @@ func TestValidatePlacement(t *testing.T) {
 		{
 			"Placement must be validated",
 			models.Placement{
-				ProductID:   1,
-				WarehouseID: 1,
+				ProductCode: uuid.NewString(),
+				WarehouseId: 1,
 				QTY:         1,
 			},
 			nil,
 		},
 		{
-			"Product placement id cannot be less than zero",
+			"Product placement code cannot be incorrect",
 			models.Placement{
-				ProductID:   0,
-				WarehouseID: 1,
+				ProductCode: "111",
+				WarehouseId: 1,
 				QTY:         1,
 			},
-			fmt.Errorf("product placement id %w", models.ErrLessOrEqualZero),
+			fmt.Errorf("product placement code %w", models.ErrIncorrectUUID),
 		},
 		{
-			"Warehouse placement id cannot be less than zero",
+			"Warehouse placement id cannot be less or equal zero",
 			models.Placement{
-				ProductID:   1,
-				WarehouseID: 0,
+				ProductCode: uuid.NewString(),
+				WarehouseId: 0,
 				QTY:         1,
 			},
-			fmt.Errorf("warehouse placement id %w", models.ErrLessOrEqualZero),
+			fmt.Errorf("placement warehouse id %w", models.ErrLessOrEqualZero),
 		},
 		{
-			"Placement quantity cannot be less than zero",
+			"Placement quantity cannot be less or equal zero",
 			models.Placement{
-				ProductID:   1,
-				WarehouseID: 1,
+				ProductCode: uuid.NewString(),
+				WarehouseId: 1,
 				QTY:         0,
 			},
 			fmt.Errorf("placement quantity %w", models.ErrLessOrEqualZero),

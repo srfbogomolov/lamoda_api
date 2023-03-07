@@ -12,20 +12,20 @@ CREATE TABLE "placements" (
   FOREIGN KEY (product_code)
         REFERENCES products(code)
         ON DELETE CASCADE,
-  CONSTRAINT uk_replacement_warehouse_id_product_code
+  CONSTRAINT uk_placement_warehouse_id_product_code
         UNIQUE (warehouse_id, product_code)
 );
 
-CREATE INDEX "ux_replacement_warehouse_id" ON placements(warehouse_id);
+CREATE INDEX "ux_placement_warehouse_id" ON placements(warehouse_id);
 
-CREATE INDEX "ux_replacement_product_code" ON placements(product_code);
+CREATE INDEX "ux_placement_product_code" ON placements(product_code);
 
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-DROP INDEX "ux_replacement_warehouse_id" CASCADE;
-DROP INDEX "ux_replacement_product_code" CASCADE;
+DROP INDEX "ux_placement_warehouse_id" CASCADE;
+DROP INDEX "ux_placement_product_code" CASCADE;
 
 DROP TABLE "placements" CASCADE;
 -- +goose StatementEnd

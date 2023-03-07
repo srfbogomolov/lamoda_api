@@ -20,28 +20,36 @@ func (r *SqlPlacementRepository) getDB() *sqlx.DB {
 	return r.db
 }
 
-func (r *SqlPlacementRepository) Save(ctx context.Context, p *models.Placement) error {
+func (r *SqlPlacementRepository) Save(ctx context.Context, p *models.Placement) (int, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	return sqlstore.SavePlacement(ctx, db, p)
 }
 
-func (r *SqlPlacementRepository) GetByID(ctx context.Context, id int) (*models.Placement, error) {
+func (r *SqlPlacementRepository) FindById(ctx context.Context, id int) (*models.Placement, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetPlacementByID(ctx, db, id)
+	return sqlstore.FindPlacementById(ctx, db, id)
 }
 
-func (r *SqlPlacementRepository) GetAll(ctx context.Context) ([]*models.Placement, error) {
+func (r *SqlPlacementRepository) Find(ctx context.Context) ([]*models.Placement, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetAllPlacements(ctx, db)
+	return sqlstore.FindPlacements(ctx, db)
+}
+
+func (r *SqlPlacementRepository) FindQTYSumByProductCode(ctx context.Context, productCode string) (int, error) {
+	db, err := getSqlxDatabase(ctx, r)
+	if err != nil {
+		return 0, err
+	}
+	return sqlstore.FindPlacementQTYSumByProductCode(ctx, db, productCode)
 }
 
 func (r *SqlPlacementRepository) InTransaction(ctx context.Context, fn func(context.Context) error) error {

@@ -17,33 +17,30 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestSaveProducts(t *testing.T) {
+func TestSavePlacements(t *testing.T) {
 	cases := []struct {
 		desc       string
-		product    models.Product
+		placement  models.Placement
 		request    string
 		mockReturn error
 		expected   string
 	}{
 		{
-			"Product must be saved",
-			models.Product{
-				Name: "test",
-				Size: 0,
-				Code: "0667da7a-5c13-4be3-8aba-b5005914f38c",
-				QTY:  1,
+			"Placement must be saved",
+			models.Placement{
+				ProductCode: "992afd25-09bd-49e6-82de-c873923d8d09",
+				WarehouseId: 1,
+				QTY:         1,
 			},
 			`{
 				"jsonrpc": "2.0",
-				"method": "warehouse.SaveProducts",
+				"method": "warehouse.SavePlacements",
 				"params": [
 					{
-						"products": [
+						"placements": [
 							{
-								"id": 1,
-								"name": "test",
-								"size": 0,
-								"code": "0667da7a-5c13-4be3-8aba-b5005914f38c",
+								"product_code": "992afd25-09bd-49e6-82de-c873923d8d09",
+								"warehouse_id": 1,
 								"qty": 1
 							}
 						]
@@ -55,24 +52,23 @@ func TestSaveProducts(t *testing.T) {
 			"",
 		},
 		{
-			"Product must be not saved",
-			models.Product{
-				Name: "test",
-				Size: 0,
-				Code: "0667da7a-5c13-4be3-8aba-b5005914f38c",
-				QTY:  1,
+			"Placement must be not saved",
+			models.Placement{
+				Id:          1,
+				ProductCode: "992afd25-09bd-49e6-82de-c873923d8d09",
+				WarehouseId: 1,
+				QTY:         1,
 			},
 			`{
 				"jsonrpc": "2.0",
-				"method": "warehouse.SaveProducts",
+				"method": "warehouse.SavePlacements",
 				"params": [
 					{
-						"products": [
+						"placements": [
 							{
 								"id": 1,
-								"name": "test",
-								"size": 0,
-								"code": "0667da7a-5c13-4be3-8aba-b5005914f38c",
+								"product_code": "992afd25-09bd-49e6-82de-c873923d8d09",
+								"warehouse_id": 1,
 								"qty": 1
 							}
 						]
@@ -86,10 +82,10 @@ func TestSaveProducts(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		mockProductRepo := new(mocks.MockProductRepository)
-		mockProductRepo.On("InTransaction", context.Background(), mock.Anything).Return(tc.mockReturn)
+		mockPlacementRepo := new(mocks.MockPlacementRepository)
+		mockPlacementRepo.On("InTransaction", context.Background(), mock.Anything).Return(tc.mockReturn)
 
-		service := services.NewService(nil, mockProductRepo, nil, testLogger)
+		service := services.NewService(nil, nil, mockPlacementRepo, testLogger)
 		handler := app.NewHandler(service)
 		recorder := httptest.NewRecorder()
 		req := httptest.NewRequest("POST", "/warehouse", bytes.NewBufferString(tc.request))
@@ -102,6 +98,6 @@ func TestSaveProducts(t *testing.T) {
 		}
 
 		assert.Equal(t, tc.expected, resp.Error)
-		mockProductRepo.AssertExpectations(t)
+		mockPlacementRepo.AssertExpectations(t)
 	}
 }

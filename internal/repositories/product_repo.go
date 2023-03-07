@@ -44,6 +44,14 @@ func (r *SqlProductRepository) Find(ctx context.Context) ([]*models.Product, err
 	return sqlstore.FindProducts(ctx, db)
 }
 
+func (r *SqlProductRepository) FindQTYSumByProductCode(ctx context.Context, productCode string) (int, error) {
+	db, err := getSqlxDatabase(ctx, r)
+	if err != nil {
+		return 0, err
+	}
+	return sqlstore.FindPlacementQTYSumByProductCode(ctx, db, productCode)
+}
+
 func (r *SqlProductRepository) InTransaction(ctx context.Context, fn func(context.Context) error) error {
 	return inSqlTransaction(ctx, r, fn)
 }

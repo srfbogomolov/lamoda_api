@@ -23,8 +23,9 @@ const (
 func Run(cfg *config.Config, db *sqlx.DB, logger *zap.SugaredLogger) {
 	warehouseRepo := repositories.NewSqlWarehouseRepository(db)
 	productRepo := repositories.NewSqlProductRepository(db)
+	placementRepo := repositories.NewSqlPlacementRepository(db)
 
-	service := services.NewService(warehouseRepo, productRepo, logger)
+	service := services.NewService(warehouseRepo, productRepo, placementRepo, logger)
 	handler := NewHandler(service)
 
 	logger.Infow("starting server", "port", cfg.Server.Port)

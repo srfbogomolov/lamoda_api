@@ -28,9 +28,9 @@ func TestSaveWarehouses(t *testing.T) {
 		{
 			"Warehouse must be saved",
 			models.Warehouse{
-				ID:         1,
-				Name:       "test",
-				IsAvalible: false,
+				Id:          1,
+				Name:        "test",
+				IsAvailable: false,
 			},
 			`{
 				"jsonrpc": "2.0",
@@ -54,9 +54,9 @@ func TestSaveWarehouses(t *testing.T) {
 		{
 			"Warehouse must be not saved",
 			models.Warehouse{
-				ID:         1,
-				Name:       "test",
-				IsAvalible: false,
+				Id:          1,
+				Name:        "test",
+				IsAvailable: false,
 			},
 			`{
 				"jsonrpc": "2.0",
@@ -83,7 +83,7 @@ func TestSaveWarehouses(t *testing.T) {
 		mockWarehouseRepo := new(mocks.MockWarehouseRepository)
 		mockWarehouseRepo.On("InTransaction", context.Background(), mock.Anything).Return(tc.mockReturn)
 
-		service := services.NewService(mockWarehouseRepo, nil, testLogger)
+		service := services.NewService(mockWarehouseRepo, nil, nil, testLogger)
 		handler := app.NewHandler(service)
 		recorder := httptest.NewRecorder()
 		req := httptest.NewRequest("POST", "/warehouse", bytes.NewBufferString(tc.request))

@@ -17,7 +17,6 @@ func TestValidateProduct(t *testing.T) {
 		{
 			"Product must be validated",
 			models.Product{
-				ID:   1,
 				Name: "not empty name",
 				Size: 0,
 				QTY:  1,
@@ -27,7 +26,6 @@ func TestValidateProduct(t *testing.T) {
 		{
 			"Product name cannot be empty",
 			models.Product{
-				ID:   1,
 				Name: "",
 				Size: 0,
 				QTY:  1,
@@ -37,7 +35,6 @@ func TestValidateProduct(t *testing.T) {
 		{
 			"Product size cannot be less than zero",
 			models.Product{
-				ID:   1,
 				Name: "not empty name",
 				Size: -1,
 				QTY:  1,
@@ -45,9 +42,8 @@ func TestValidateProduct(t *testing.T) {
 			fmt.Errorf("product size %w", models.ErrLessZero),
 		},
 		{
-			"Product quantity cannot be less than zero",
+			"Product quantity cannot be less or equal zero",
 			models.Product{
-				ID:   1,
 				Name: "not empty name",
 				Size: 0,
 				QTY:  0,
