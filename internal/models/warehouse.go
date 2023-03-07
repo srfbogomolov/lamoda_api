@@ -10,8 +10,8 @@ type Warehouse struct {
 	IsAvailable bool   `db:"is_available" json:"is_available"`
 }
 
-func (w *Warehouse) Validate() error {
-	if w.Name == "" {
+func (warehouse *Warehouse) Validate() error {
+	if warehouse.Name == "" {
 		return fmt.Errorf("warehouse name %w", ErrEmpty)
 	}
 	return nil

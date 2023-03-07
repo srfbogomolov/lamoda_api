@@ -1,30 +1,24 @@
 package models
 
 import (
-	"context"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type Placement struct {
-	ID          int `db:"id" json:"id"`
-	ProductID   int `db:"product_id" json:"product_id"`
-	WarehouseID int `db:"warehouse_id" json:"warehouse_id"`
-	QTY         int `db:"qty" json:"qty"`
+	Id          int    `db:"id" json:"id"`
+	WarehouseId int    `db:"warehouse_id" json:"warehouse_id"`
+	ProductCode string `db:"product_code" json:"product_code"`
+	QTY         int    `db:"qty" json:"qty"`
 }
 
-type PlacementRepository interface {
-	Save(ctx context.Context, p *Placement) error
-	GetByID(ctx context.Context, id int) (*Placement, error)
-	GetAll(ctx context.Context) ([]*Placement, error)
-	InTransaction(ctx context.Context, fn func(context.Context) error) error
-}
-
-func (p *Placement) Validate() error {
-	if p.ProductID <= 0 {
-		return fmt.Errorf("product placement id %w", ErrLessOrEqualZero)
-	} else if p.WarehouseID <= 0 {
-		return fmt.Errorf("warehouse placement id %w", ErrLessOrEqualZero)
-	} else if p.QTY <= 0 {
+func (placement *Placement) Validate() error {
+	if _, err := uuid.Parse(placement.ProductCode); err != nil {
+		return fmt.Errorf("product placement code %w", ErrIncorrectUUID)
+	} else if placement.WarehouseId <= 0 {
+		return fmt.Errorf("placement warehouse id %w", ErrLessOrEqualZero)
+	} else if placement.QTY <= 0 {
 		return fmt.Errorf("placement quantity %w", ErrLessOrEqualZero)
 	}
 	return nil

@@ -11,12 +11,12 @@ type Product struct {
 	QTY  int    `db:"qty" json:"qty"`
 }
 
-func (p *Product) Validate() error {
-	if p.Name == "" {
+func (product *Product) Validate() error {
+	if product.Name == "" {
 		return fmt.Errorf("product name %w", ErrEmpty)
-	} else if p.Size < 0 {
+	} else if product.Size < 0 {
 		return fmt.Errorf("product size %w", ErrLessZero)
-	} else if p.QTY <= 0 {
+	} else if product.QTY <= 0 {
 		return fmt.Errorf("product quantity %w", ErrLessOrEqualZero)
 	}
 	return nil
