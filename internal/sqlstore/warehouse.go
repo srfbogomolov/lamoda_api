@@ -8,28 +8,29 @@ import (
 
 const WarehouseTable = "warehouses"
 
-func SaveWarehouse(ctx context.Context, db SqlxDatabase, w *models.Warehouse) error {
-	sql := `INSERT INTO ` + WarehouseTable + `(name, is_available) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING id`
+func SaveWarehouse(ctx context.Context, db SqlxDatabase, warehouse *models.Warehouse) (int, error) {
+	query := `INSERT INTO ` + WarehouseTable + `(name, is_available) VALUES ($1, $2)
+				ON CONFLICT DO NOTHING RETURNING id`
 	var lastId int
-	stmt, err := db.PreparexContext(ctx, sql)
+	stmt, err := db.PreparexContext(ctx, query)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	stmt.GetContext(ctx, &lastId, w.Name, w.IsAvalible)
-	w.ID = lastId
-	return err
+	stmt.GetContext(ctx, &lastId, warehouse.Name, warehouse.IsAvailable)
+	warehouse.Id = lastId
+	return lastId, err
 }
 
-func GetWarehouseByID(ctx context.Context, db SqlxDatabase, id int) (*models.Warehouse, error) {
-	w := new(models.Warehouse)
-	sql := `SELECT * FROM ` + WarehouseTable + ` WHERE id=$1`
-	err := db.GetContext(ctx, &w, sql, id)
-	return w, err
+func FindWarehouseById(ctx context.Context, db SqlxDatabase, id int) (*models.Warehouse, error) {
+	warehouse := new(models.Warehouse)
+	query := `SELECT * FROM ` + WarehouseTable + ` WHERE id=$1`
+	err := db.GetContext(ctx, warehouse, query, id)
+	return warehouse, err
 }
 
-func GetAllWarehouses(ctx context.Context, db SqlxDatabase) ([]*models.Warehouse, error) {
+func FindWarehouses(ctx context.Context, db SqlxDatabase) ([]*models.Warehouse, error) {
 	var warehouses []*models.Warehouse
-	sql := `SELECT * FROM ` + WarehouseTable
-	err := db.SelectContext(ctx, &warehouses, sql)
+	query := `SELECT * FROM ` + WarehouseTable
+	err := db.SelectContext(ctx, &warehouses, query)
 	return warehouses, err
 }

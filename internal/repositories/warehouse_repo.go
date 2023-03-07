@@ -20,10 +20,10 @@ func (r *sqlWarehouseRepository) getDB() *sqlx.DB {
 	return r.db
 }
 
-func (r *sqlWarehouseRepository) Save(ctx context.Context, w *models.Warehouse) error {
+func (r *sqlWarehouseRepository) Save(ctx context.Context, w *models.Warehouse) (int, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	return sqlstore.SaveWarehouse(ctx, db, w)
 }
@@ -33,7 +33,7 @@ func (r *sqlWarehouseRepository) GetByID(ctx context.Context, id int) (*models.W
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetWarehouseByID(ctx, db, id)
+	return sqlstore.FindWarehouseById(ctx, db, id)
 }
 
 func (r *sqlWarehouseRepository) GetAll(ctx context.Context) ([]*models.Warehouse, error) {
@@ -41,7 +41,7 @@ func (r *sqlWarehouseRepository) GetAll(ctx context.Context) ([]*models.Warehous
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetAllWarehouses(ctx, db)
+	return sqlstore.FindWarehouses(ctx, db)
 }
 
 func (r *sqlWarehouseRepository) InTransaction(ctx context.Context, fn func(context.Context) error) error {

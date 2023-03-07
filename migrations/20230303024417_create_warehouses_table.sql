@@ -2,7 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE "warehouses" (
     "id" bigserial,
-    "name" text NOT NULL,
+    "name" text UNIQUE NOT NULL,
     "is_available" boolean NOT NULL,
     PRIMARY KEY ("id")
 );
