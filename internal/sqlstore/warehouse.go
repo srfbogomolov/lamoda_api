@@ -9,7 +9,7 @@ import (
 const WarehouseTable = "warehouses"
 
 func SaveWarehouse(ctx context.Context, db SqlxDatabase, warehouse *models.Warehouse) (int, error) {
-	query := `INSERT INTO ` + WarehouseTable + `(name, is_available) VALUES ($1, $2)
+	query := `INSERT INTO ` + WarehouseTable + ` (name, is_available) VALUES ($1, $2)
 				ON CONFLICT DO NOTHING RETURNING id`
 	var lastId int
 	stmt, err := db.PreparexContext(ctx, query)

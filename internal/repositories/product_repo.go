@@ -20,28 +20,28 @@ func (r *SqlProductRepository) getDB() *sqlx.DB {
 	return r.db
 }
 
-func (r *SqlProductRepository) Save(ctx context.Context, p *models.Product) error {
+func (r *SqlProductRepository) Save(ctx context.Context, p *models.Product) (string, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
-		return err
+		return "", err
 	}
 	return sqlstore.SaveProduct(ctx, db, p)
 }
 
-func (r *SqlProductRepository) GetByID(ctx context.Context, id int) (*models.Product, error) {
+func (r *SqlProductRepository) FindByCode(ctx context.Context, code string) (*models.Product, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetProductByID(ctx, db, id)
+	return sqlstore.FindProductByCode(ctx, db, code)
 }
 
-func (r *SqlProductRepository) GetAll(ctx context.Context) ([]*models.Product, error) {
+func (r *SqlProductRepository) Find(ctx context.Context) ([]*models.Product, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	return sqlstore.GetAllProducts(ctx, db)
+	return sqlstore.FindProducts(ctx, db)
 }
 
 func (r *SqlProductRepository) InTransaction(ctx context.Context, fn func(context.Context) error) error {

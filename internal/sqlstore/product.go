@@ -8,28 +8,29 @@ import (
 
 const ProductTable = "products"
 
-func SaveProduct(ctx context.Context, db SqlxDatabase, p *models.Product) error {
-	sql := `INSERT INTO ` + ProductTable + `(name, size, code, qty) VALUES($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id`
-	var lastId int
-	stmt, err := db.PreparexContext(ctx, sql)
+func SaveProduct(ctx context.Context, db SqlxDatabase, product *models.Product) (string, error) {
+	query := `INSERT INTO ` + ProductTable + ` (name, size, qty) VALUES ($1, $2, $3)
+				ON CONFLICT DO NOTHING RETURNING code`
+	var lastCode string
+	stmt, err := db.PreparexContext(ctx, query)
 	if err != nil {
-		return err
+		return "", err
 	}
-	stmt.GetContext(ctx, &lastId, p.Name, p.Size, p.Code, p.QTY)
-	p.ID = lastId
-	return err
+	stmt.GetContext(ctx, &lastCode, product.Name, product.Size, product.QTY)
+	product.Code = lastCode
+	return lastCode, err
 }
 
-func GetProductByID(ctx context.Context, db SqlxDatabase, id int) (*models.Product, error) {
-	p := new(models.Product)
-	sql := `SELECT * FROM ` + ProductTable + ` WHERE id=$1`
-	err := db.GetContext(ctx, &p, sql, id)
-	return p, err
+func FindProductByCode(ctx context.Context, db SqlxDatabase, code string) (*models.Product, error) {
+	product := new(models.Product)
+	query := `SELECT * FROM ` + ProductTable + ` WHERE code=$1`
+	err := db.GetContext(ctx, product, query, code)
+	return product, err
 }
 
-func GetAllProducts(ctx context.Context, db SqlxDatabase) ([]*models.Product, error) {
-	var comments []*models.Product
-	sql := `SELECT * FROM ` + ProductTable
-	err := db.SelectContext(ctx, &comments, sql)
-	return comments, err
+func FindProducts(ctx context.Context, db SqlxDatabase) ([]*models.Product, error) {
+	var products []*models.Product
+	query := `SELECT * FROM ` + ProductTable
+	err := db.SelectContext(ctx, &products, query)
+	return products, err
 }

@@ -1,12 +1,11 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE "products" (
-    "id" bigserial,
-    "name" text NOT NULL,
-    "size" smallint NOT NULL,
-    "code" uuid NOT NULL DEFAULT gen_random_uuid(),
-    "qty" bigint NOT NULL,
-    PRIMARY KEY ("id")
+    "code" uuid DEFAULT gen_random_uuid(),
+    "name" text UNIQUE NOT NULL,
+    "size" int NOT NULL,
+    "qty" int NOT NULL,
+    PRIMARY KEY ("code")
 );
 -- +goose StatementEnd
 

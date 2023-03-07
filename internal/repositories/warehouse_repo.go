@@ -28,7 +28,7 @@ func (r *sqlWarehouseRepository) Save(ctx context.Context, w *models.Warehouse) 
 	return sqlstore.SaveWarehouse(ctx, db, w)
 }
 
-func (r *sqlWarehouseRepository) GetByID(ctx context.Context, id int) (*models.Warehouse, error) {
+func (r *sqlWarehouseRepository) FindById(ctx context.Context, id int) (*models.Warehouse, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (r *sqlWarehouseRepository) GetByID(ctx context.Context, id int) (*models.W
 	return sqlstore.FindWarehouseById(ctx, db, id)
 }
 
-func (r *sqlWarehouseRepository) GetAll(ctx context.Context) ([]*models.Warehouse, error) {
+func (r *sqlWarehouseRepository) Find(ctx context.Context) ([]*models.Warehouse, error) {
 	db, err := getSqlxDatabase(ctx, r)
 	if err != nil {
 		return nil, err
