@@ -1,15 +1,13 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE products (
-  code uuid DEFAULT gen_random_uuid(),
-  name text UNIQUE NOT NULL,
+  id bigserial,
+  code uuid DEFAULT gen_random_uuid() NOT NULL,
+  name text NOT NULL,
   size int NOT NULL,
-  qty int NOT NULL,
-  PRIMARY KEY (code),
-  CONSTRAINT products_size_greater_or_equal_zero
-    CHECK (size >= 0),
-  CONSTRAINT products_qty_greater_zero
-    CHECK (qty > 0)
+  PRIMARY KEY (id),
+  CONSTRAINT products_size_gte_zero
+    CHECK (size >= 0)
 );
 -- +goose StatementEnd
 

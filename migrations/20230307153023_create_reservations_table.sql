@@ -8,7 +8,7 @@ CREATE TABLE reservations (
   FOREIGN KEY (placement_id)
     REFERENCES placements(id)
     ON DELETE CASCADE,
-  CONSTRAINT reservations_qty_greater_zero
+  CONSTRAINT reservations_qty_gt_zero
     CHECK (qty > 0)
 );
 
