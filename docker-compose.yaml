@@ -1,9 +1,13 @@
-version: '3'
+version: '3.9'
+
+networks:
+  network:
+    driver: bridge
 
 services:
-  postgres:
+  db:
     image: postgres:latest
-    container_name: postgres
+    container_name: db
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -11,3 +15,16 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - 5432:5432
+    networks:
+      - network
+  lamoda:
+    container_name: lamoda
+    restart: always
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - network
+    depends_on:
+      - db
